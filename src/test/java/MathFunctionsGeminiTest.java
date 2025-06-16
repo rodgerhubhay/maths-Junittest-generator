@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MathFunctionsGeminiTest {
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-    private static final String API_KEY = "AIzaSyCRBdJEi8p7ZezUWmNg70Q6_LzmczcsMqI"; // Replace with your key
+    private static final String API_KEY = ""; // Replace with your key
     private static final String SAVED_RESPONSE_FILE = "saved_gemini_response.json";
     private static final OkHttpClient client = new OkHttpClient();
     private static final Random random = new Random();
