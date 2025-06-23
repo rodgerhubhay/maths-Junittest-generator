@@ -1,3 +1,4 @@
+```java
 public class MathFunctions {
     
     /**
@@ -8,11 +9,11 @@ public class MathFunctions {
      * @throws ArithmeticException if the result overflows an int
      */
     public static int add(int a, int b) {
-        long result = (long) a + b;
-        if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE) {
+        try {
+            return Math.addExact(a, b);
+        } catch (ArithmeticException e) {
             throw new ArithmeticException("Integer overflow in addition");
         }
-        return a + b;
     }
     
     /**
@@ -23,11 +24,11 @@ public class MathFunctions {
      * @throws ArithmeticException if the result overflows an int
      */
     public static int subtract(int a, int b) {
-        long result = (long) a - b;
-        if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE) {
+        try {
+            return Math.subtractExact(a, b);
+        } catch (ArithmeticException e) {
             throw new ArithmeticException("Integer overflow in subtraction");
         }
-        return a - b;
     }
     
     /**
@@ -38,11 +39,11 @@ public class MathFunctions {
      * @throws ArithmeticException if the result overflows an int
      */
     public static int multiply(int a, int b) {
-        long result = (long) a * b;
-        if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE) {
+        try {
+            return Math.multiplyExact(a, b);
+        } catch (ArithmeticException e) {
             throw new ArithmeticException("Integer overflow in multiplication");
         }
-        return a * b;
     }
     
     /**
@@ -57,11 +58,6 @@ public class MathFunctions {
         // Check for division by zero
         if (b == 0) {
             throw new ArithmeticException("Division by zero");
-        }
-        
-        // Special case that causes integer overflow
-        if (a == Integer.MIN_VALUE && b == -1) {
-            throw new ArithmeticException("Integer overflow in division");
         }
         
         return (double) a / b;
@@ -116,20 +112,15 @@ public class MathFunctions {
      * @throws ArithmeticException if result would overflow or for 0^0
      */
     public static double power(double base, double exponent) {
-        // Handle 0^0 indeterminate form
         if (base == 0 && exponent == 0) {
             throw new ArithmeticException("Indeterminate form: 0^0");
         }
-        
-        // Check for potential overflow
+
         double result = Math.pow(base, exponent);
-        if (Double.isInfinite(result)) {
-            throw new ArithmeticException("Result too large (overflow)");
+        if (Double.isNaN(result) || Double.isInfinite(result)) {
+            throw new ArithmeticException("Result is undefined or too large (overflow)");
         }
-        if (result == 0 && exponent > 0 && base != 0) {
-            throw new ArithmeticException("Result too small (underflow)");
-        }
-        
+
         return result;
     }
     
@@ -144,14 +135,15 @@ public class MathFunctions {
             throw new ArithmeticException("Factorial of negative number");
         }
         
+        if (n > 20) {
+            throw new ArithmeticException("Factorial overflow for n > 20");
+        }
+
         long result = 1;
         for (int i = 1; i <= n; i++) {
-            try {
-                result = Math.multiplyExact(result, i);
-            } catch (ArithmeticException e) {
-                throw new ArithmeticException("Factorial overflow at i=" + i);
-            }
+            result *= i;
         }
         return result;
     }
 }
+```
